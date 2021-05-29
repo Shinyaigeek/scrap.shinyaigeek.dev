@@ -9,7 +9,7 @@ use std::time::SystemTime;
 #[table_name = "threads"]
 pub struct NewThread {
     pub title: String,
-    pub published: bool
+    pub published: bool,
 }
 
 pub fn create(thread: NewThread, connection: PgConnection) -> Thread {
