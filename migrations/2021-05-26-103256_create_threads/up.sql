@@ -4,6 +4,6 @@ CREATE TABLE threads (
   title VARCHAR NOT NULL,
   published BOOLEAN NOT NULL DEFAULT 'f',
   is_open BOOLEAN NOT NULL DEFAULT 't',
-  published_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL
+  published_at TIMESTAMP NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP NOT NULL DEFAULT now()
 )
