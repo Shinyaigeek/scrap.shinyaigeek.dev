@@ -1,3 +1,4 @@
 mod _models;
-mod _repositories;
+pub mod _repositories;
 mod _schemas;
+pub mod connection;
