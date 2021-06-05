@@ -1,7 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-#[macro_use]
-extern crate rocket;
+use actix_web::{get, web, App, HttpServer, Responder};
+
 #[macro_use]
 extern crate diesel;
 #[macro_use]
@@ -18,16 +18,14 @@ use crate::db::connection::establish::establish_connection;
 
 mod db;
 
-// #[post("/threads")]
-// async fn create_threads() -> &'static str {
+// async fn create_threads() -> impl Responder {
 //     dotenv().ok();
 
 //     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
 //     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 // }
 
-#[get("/post_threads")]
-fn pos() -> &'static str {
+async fn pos() -> impl Responder {
     let connection = establish_connection();
     create(
         NewThread {
@@ -39,25 +37,30 @@ fn pos() -> &'static str {
     "dekita"
 }
 
-#[get("/threads")]
-fn asdf() -> String {
+async fn asdf() -> impl Responder {
     let connection = establish_connection();
     let threads = reads(connection);
     format!("title: {:?}", threads[0].title)
 }
 
-#[get("/")]
-fn index() -> &'static str {
+async fn index() -> impl Responder {
     "Hello, Rocket!"
 }
 
-#[get("/async")]
-async fn async_hello() -> &'static str {
-    rocket::tokio::time::sleep(std::time::Duration::from_millis(1000)).await;
+async fn async_hello() -> impl Responder {
     "Hello, Rocket! I send this message 1s later"
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, async_hello, pos, asdf])
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(index))
+            .route("/async", web::get().to(async_hello))
+            .route("/threads", web::get().to(asdf))
+            .route("/post_threads", web::get().to(pos))
+    })
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
 }
