@@ -16,9 +16,12 @@ use crate::db::_repositories::threads::create::{create, NewThread};
 use crate::db::_repositories::threads::read::reads;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::users::signin;
+use crate::auth::get_gh_info_with_token;
 
 mod db;
 mod routes;
+mod auth;
+mod util;
 
 fn get_auth_from_header(req: HttpRequest) -> Option<String> {
     let auth = req.headers().get("Authorization");
