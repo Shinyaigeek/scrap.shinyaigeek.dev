@@ -15,7 +15,7 @@ use std::env;
 use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
 use crate::db::_repositories::threads::create::{create, NewThread};
 use crate::db::_repositories::threads::read::reads;
-use crate::db::_repositories::users::create::{create as ccc};
+use crate::db::_repositories::users::create::{create as ccc, NewUser};
 use crate::db::_repositories::users::read::{read as uuu};
 use crate::db::connection::establish::establish_connection;
 use crate::routes::users::signin;
@@ -91,8 +91,14 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
     let client = HttpClient::new();
     let gh_username = get_gh_info_with_token(idToken, client).await;
 
+    let connection = establish_connection();
+
+    let user = ccc(NewUser {
+        gh_user_id: gh_username
+    }, connection);
+
     HttpResponse::Ok().json(UserMessage {
-        gh_id: "Authorization header field must be exist with /signin request".to_string()
+        gh_id: user.gh_user_id
     })
 }
 
@@ -140,6 +146,7 @@ async fn main() -> std::io::Result<()> {
             .route("/threads", web::get().to(asdf))
             .route("/post_threads", web::get().to(pos))
             .route("/signin", web::get().to(dispatch_signin))
+            .route("/signup", web::post().to(dispatch_signup))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
