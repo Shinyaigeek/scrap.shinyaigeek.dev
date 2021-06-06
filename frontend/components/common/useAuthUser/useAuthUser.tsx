@@ -19,8 +19,37 @@ export const useAuthUser = () => {
 
   const login = async () => {
     if (factory) {
-      factory.signInWithPopup(provider).then(user => {
-          setUser(user.user);
+      factory.signInWithPopup(provider).then(async (user) => {
+        console.log(user);
+        const token = await user.user.getIdToken();
+        const asdf = await fetch(`http://localhost:8080/signin`, {
+          headers: {
+            Authorization: token
+          },
+          mode: "cors"
+        })
+        const j = await asdf.json();
+        console.log(j)
+        setUser(user.user);
+      });
+    }
+  };
+
+  const signup = async () => {
+    if (factory) {
+      factory.signInWithPopup(provider).then(async (user) => {
+        console.log(user);
+        const token = await user.user.getIdToken();
+        const asdf = await fetch(`http://localhost:8080/signup`, {
+          headers: {
+            Authorization: token
+          },
+          mode: "cors",
+          method: "POST"
+        })
+        const j = await asdf.json();
+        console.log(j)
+        setUser(user.user);
       });
     }
   };
@@ -32,5 +61,5 @@ export const useAuthUser = () => {
     }
   };
 
-  return [user, login, logout] as const;
+  return [user, login, signup, logout] as const;
 };
