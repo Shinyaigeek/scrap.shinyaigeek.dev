@@ -1,12 +1,11 @@
 use std::time::SystemTime;
 
 #[derive(Queryable)]
-pub struct Thread {
+pub struct Comment {
     pub id: i32,
-    pub title: String,
+    pub author: String,
     pub content: String,
-    pub published: bool,
-    pub is_open: bool,
+    pub thread: i32,
     pub published_at: SystemTime,
     pub updated_at: SystemTime,
 }

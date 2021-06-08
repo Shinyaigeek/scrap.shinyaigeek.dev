@@ -1,8 +1,8 @@
 use crate::util::http_client::HttpClient;
 use dotenv::dotenv;
+use serde_json::{Result, Value};
 use std::collections::HashMap;
 use std::env;
-use serde_json::{Result, Value};
 
 const ENDPOINT: &str = "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=";
 
