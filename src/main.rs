@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-use actix_web::{get, web, http, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{get, http, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 
 #[macro_use]
 extern crate diesel;
@@ -16,7 +16,7 @@ use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
 use crate::db::_repositories::threads::create::{create, NewThread};
 use crate::db::_repositories::threads::read::reads;
 use crate::db::_repositories::users::create::{create as ccc, NewUser};
-use crate::db::_repositories::users::read::{read as uuu};
+use crate::db::_repositories::users::read::read as uuu;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::users::signin;
 use crate::util::http_client::HttpClient;
@@ -26,15 +26,15 @@ mod auth;
 mod db;
 mod routes;
 mod util;
- 
+
 #[derive(Serialize)]
 struct ErrMessage {
-    message: String
+    message: String,
 }
 
 #[derive(Serialize)]
 struct UserMessage {
-    gh_id: String
+    gh_id: String,
 }
 
 fn get_auth_from_header(req: HttpRequest) -> Option<String> {
@@ -48,14 +48,14 @@ fn get_auth_from_header(req: HttpRequest) -> Option<String> {
 }
 
 async fn dispatch_signin(req: HttpRequest) -> impl Responder {
-
     let connection = establish_connection();
     let idToken = get_auth_from_header(req);
     let idToken = match idToken {
         Some(token) => token,
         None => {
             return HttpResponse::BadRequest().json(ErrMessage {
-                message: "Authorization header field must be exist with /signin request".to_string()
+                message: "Authorization header field must be exist with /signin request"
+                    .to_string(),
             });
         }
     };
@@ -68,13 +68,13 @@ async fn dispatch_signin(req: HttpRequest) -> impl Responder {
         Some(i) => i,
         None => {
             return HttpResponse::BadRequest().json(ErrMessage {
-                message: "There is no user, please signup before signin".to_string()
+                message: "There is no user, please signup before signin".to_string(),
             });
         }
     };
 
     HttpResponse::Ok().json(UserMessage {
-        gh_id: a.gh_user_id
+        gh_id: a.gh_user_id,
     })
 }
 
@@ -84,7 +84,8 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
         Some(token) => token,
         None => {
             return HttpResponse::BadRequest().json(ErrMessage {
-                message: "Authorization header field must be exist with /signup request".to_string()
+                message: "Authorization header field must be exist with /signup request"
+                    .to_string(),
             });
         }
     };
@@ -93,12 +94,15 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
 
     let connection = establish_connection();
 
-    let user = ccc(NewUser {
-        gh_user_id: gh_username
-    }, connection);
+    let user = ccc(
+        NewUser {
+            gh_user_id: gh_username,
+        },
+        connection,
+    );
 
     HttpResponse::Ok().json(UserMessage {
-        gh_id: user.gh_user_id
+        gh_id: user.gh_user_id,
     })
 }
 
@@ -135,11 +139,11 @@ async fn async_hello() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::default()
-              .allowed_origin("http://localhost:3000")
-              .allowed_methods(vec!["GET", "POST"])
-              .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-              .allowed_header(http::header::CONTENT_TYPE)
-              .max_age(3600);
+            .allowed_origin("http://localhost:3000")
+            .allowed_methods(vec!["GET", "POST"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .max_age(3600);
         App::new()
             .wrap(cors)
             .route("/", web::get().to(index))
