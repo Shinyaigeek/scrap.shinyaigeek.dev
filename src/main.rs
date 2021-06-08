@@ -107,6 +107,7 @@ async fn pos() -> impl Responder {
     create(
         NewThread {
             title: "asdf".to_string(),
+            content: "hogehoge".to_string(),
             published: true,
         },
         connection,
