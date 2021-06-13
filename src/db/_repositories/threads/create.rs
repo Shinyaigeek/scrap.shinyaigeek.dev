@@ -1,7 +1,7 @@
 use super::super::super::_models::threads::Thread;
 use super::super::super::_schemas::threads::threads;
 use diesel;
-use diesel::pg::PgConnection;
+use super::super::super::connection::establish::DbConnection;
 use diesel::prelude::*;
 use std::time::SystemTime;
 
@@ -13,7 +13,7 @@ pub struct NewThread {
     pub published: bool,
 }
 
-pub fn create(thread: NewThread, connection: PgConnection) -> Thread {
+pub fn create(thread: NewThread, connection: DbConnection) -> Thread {
     diesel::insert_into(threads::table)
         .values(&thread)
         .get_result(&connection)
