@@ -1,7 +1,7 @@
 use super::super::super::_models::comments::Comment;
 use super::super::super::_schemas::comments::comments;
 use diesel;
-use diesel::pg::PgConnection;
+use super::super::super::connection::establish::DbConnection;
 use diesel::prelude::*;
 use std::time::SystemTime;
 
@@ -13,7 +13,7 @@ pub struct NewComment {
     pub thread: i32,
 }
 
-pub fn create(comment: NewComment, connection: PgConnection) -> Comment {
+pub fn create(comment: NewComment, connection: DbConnection) -> Comment {
     diesel::insert_into(comments::table)
         .values(&comment)
         .get_result(&connection)
