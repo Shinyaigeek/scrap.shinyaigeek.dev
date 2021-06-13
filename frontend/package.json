@@ -4,7 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@vanilla-extract/babel-plugin": "^1.0.0",
+    "@vanilla-extract/css": "^1.0.0",
+    "@vanilla-extract/webpack-plugin": "^1.0.1",
+    "css-loader": "^5.2.6",
     "dotenv": "^10.0.0",
+    "mini-css-extract-plugin": "^1.6.0",
     "next": "^10.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -12,7 +17,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "next export"
   },
   "devDependencies": {
     "@types/react": "^17.0.8",
