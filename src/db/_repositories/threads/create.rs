@@ -1,7 +1,7 @@
 use super::super::super::_models::threads::Thread;
 use super::super::super::_schemas::threads::threads;
-use diesel;
 use super::super::super::connection::establish::DbConnection;
+use diesel;
 use diesel::prelude::*;
 use std::time::SystemTime;
 
