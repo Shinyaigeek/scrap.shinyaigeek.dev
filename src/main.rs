@@ -14,8 +14,8 @@ use std::env;
 use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
 use crate::db::_repositories::threads::create::{create, NewThread};
 use crate::db::_repositories::threads::read::reads;
-use crate::db::_repositories::users::read::read as uuu;
 use crate::db::applications::users::signup::signup;
+use crate::db::applications::users::signin::signin;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::users::signin;
 use crate::util::http_client::HttpClient;
@@ -61,9 +61,9 @@ async fn dispatch_signin(req: HttpRequest) -> impl Responder {
     let client = HttpClient::new();
     let gh_username = get_gh_info_with_token(idToken, client).await;
 
-    let a = uuu(gh_username, connection);
+    let user = signin(gh_username, connection);
 
-    let a = match a {
+    let user = match user {
         Some(i) => i,
         None => {
             return HttpResponse::BadRequest().json(ErrMessage {
@@ -73,7 +73,7 @@ async fn dispatch_signin(req: HttpRequest) -> impl Responder {
     };
 
     HttpResponse::Ok().json(UserMessage {
-        gh_id: a.gh_user_id,
+        gh_id: user.gh_user_id,
     })
 }
 
@@ -96,17 +96,12 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
     let user = signup(gh_username, connection);
 
     match user {
-        Ok(user) => {
-
-            HttpResponse::Ok().json(UserMessage {
-                gh_id: user.gh_user_id,
-            })
-
-        },
+        Ok(user) => HttpResponse::Ok().json(UserMessage {
+            gh_id: user.gh_user_id,
+        }),
         Err(_) => {
             return HttpResponse::InternalServerError().json(ErrMessage {
-                message: "oops!! signup was failed."
-                    .to_string(),
+                message: "oops!! signup was failed.".to_string(),
             });
         }
     }
