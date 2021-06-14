@@ -12,8 +12,8 @@ use dotenv::dotenv;
 use std::env;
 
 use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
-use crate::db::_repositories::threads::read::reads;
 use crate::db::applications::threads::create::create_thread;
+use crate::db::applications::threads::read::read_threads;
 use crate::db::applications::users::signin::signin;
 use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
@@ -115,7 +115,7 @@ async fn pos() -> impl Responder {
 
 async fn asdf() -> impl Responder {
     let connection = establish_connection();
-    let threads = reads(connection);
+    let threads = read_threads(-1, connection).unwrap();
     format!("title: {:?}", threads[0].title)
 }
 
