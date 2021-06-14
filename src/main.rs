@@ -12,10 +12,10 @@ use dotenv::dotenv;
 use std::env;
 
 use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
-use crate::db::_repositories::threads::create::{create, NewThread};
 use crate::db::_repositories::threads::read::reads;
-use crate::db::applications::users::signup::signup;
+use crate::db::applications::threads::create::create_thread;
 use crate::db::applications::users::signin::signin;
+use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::users::signin;
 use crate::util::http_client::HttpClient;
@@ -109,14 +109,7 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
 
 async fn pos() -> impl Responder {
     let connection = establish_connection();
-    create(
-        NewThread {
-            title: "asdf".to_string(),
-            content: "hogehoge".to_string(),
-            published: true,
-        },
-        connection,
-    );
+    create_thread("asdf".to_string(), "hogehoge".to_string(), true, connection);
     "dekita"
 }
 
