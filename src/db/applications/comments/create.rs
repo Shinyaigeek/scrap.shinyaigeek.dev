@@ -13,7 +13,7 @@ pub fn create_comment(
         NewComment {
             content,
             author,
-            thread
+            thread,
         },
         connection,
     )
