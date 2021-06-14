@@ -1,4 +1,4 @@
-pub use diesel::pg::{PgConnection as DbConnection};
+pub use diesel::pg::PgConnection as DbConnection;
 use diesel::prelude::*;
 use dotenv::dotenv;
 use std::env;
