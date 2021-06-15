@@ -109,7 +109,13 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
 
 async fn pos() -> impl Responder {
     let connection = establish_connection();
-    create_thread("asdf".to_string(), "hogehoge".to_string(), true, connection);
+    create_thread(
+        "asdf".to_string(),
+        "nya-n".to_string(),
+        "hogehoge".to_string(),
+        true,
+        connection,
+    );
     "dekita"
 }
 

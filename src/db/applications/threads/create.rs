@@ -5,6 +5,7 @@ use diesel::result::Error;
 
 pub fn create_thread(
     title: String,
+    slug: String,
     content: String,
     published: bool,
     connection: DbConnection,
@@ -12,6 +13,7 @@ pub fn create_thread(
     create(
         NewThread {
             title,
+            slug,
             content,
             published,
         },
