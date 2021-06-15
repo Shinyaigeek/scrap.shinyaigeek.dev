@@ -5,6 +5,8 @@ use actix_web::{
     HttpServer, Responder,
 };
 
+use actix_web::http::Method as ActixMethod;
+
 #[macro_use]
 extern crate diesel;
 #[macro_use]
@@ -21,7 +23,7 @@ use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::threads::read::threads_read;
 use crate::routes::users::signin;
-use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse};
+use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse, GET};
 use crate::util::http_client::HttpClient;
 use actix_cors::Cors;
 use serde::Serialize;
@@ -48,6 +50,17 @@ fn get_auth_from_header(req: ActixHttpRequest) -> Option<String> {
     };
 
     auth
+}
+
+fn actix_request_into_http_request(req: ActixHttpRequest) -> HttpRequest {
+    HttpRequest {
+        path: req.path().to_string(),
+        method: match req.method() {
+            &ActixMethod::GET => HttpRequestMethod::GET,
+            // TODO
+            _ => panic!("todo task; HTTP Request Method"),
+        },
+    }
 }
 
 async fn dispatch_signin(req: ActixHttpRequest) -> impl Responder {
@@ -123,11 +136,8 @@ async fn pos() -> impl Responder {
     "dekita"
 }
 
-async fn dispatch_threads_read() -> impl Responder {
-    let request = HttpRequest {
-        path: "/threads/read".to_string(),
-        method: HttpRequestMethod::GET,
-    };
+async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {
+    let request = actix_request_into_http_request(req);
     let response = threads_read(request);
     response.body
 }
