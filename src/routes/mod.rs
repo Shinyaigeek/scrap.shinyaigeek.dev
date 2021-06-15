@@ -1,5 +1,6 @@
 pub mod threads;
 pub mod users;
+mod util;
 
 pub const GET: &str = "GET";
 
@@ -12,6 +13,6 @@ pub struct HttpRequest {
     pub method: HttpRequestMethod,
 }
 pub struct HttpResponse {
-    pub status: u8,
+    pub status: u16,
     pub body: String,
 }

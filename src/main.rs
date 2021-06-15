@@ -63,6 +63,19 @@ fn actix_request_into_http_request(req: ActixHttpRequest) -> HttpRequest {
     }
 }
 
+fn http_response_into_actix_response(res: HttpResponse) -> ActixHttpResponse {
+    let mut base_response = match res.status {
+        200 => ActixHttpResponse::Ok(),
+        500 => ActixHttpResponse::InternalServerError(),
+        // TODO
+        _ => ActixHttpResponse::InternalServerError(),
+    };
+
+    base_response
+        .content_type("application/json")
+        .body(res.body)
+}
+
 async fn dispatch_signin(req: ActixHttpRequest) -> impl Responder {
     let connection = establish_connection();
     let idToken = get_auth_from_header(req);
@@ -139,7 +152,7 @@ async fn pos() -> impl Responder {
 async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {
     let request = actix_request_into_http_request(req);
     let response = threads_read(request);
-    response.body
+    http_response_into_actix_response(response)
 }
 
 async fn index() -> impl Responder {
@@ -168,6 +181,7 @@ async fn main() -> std::io::Result<()> {
             .route("/post_threads", web::get().to(pos))
             .route("/signin", web::get().to(dispatch_signin))
             .route("/signup", web::post().to(dispatch_signup))
+            .route("/threads/read", web::get().to(dispatch_threads_read))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
