@@ -1,6 +1,11 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-use actix_web::{get, http, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    get, http, web, App, HttpRequest as ActixHttpRequest, HttpResponse as ActixHttpResponse,
+    HttpServer, Responder,
+};
+
+use actix_web::http::Method as ActixMethod;
 
 #[macro_use]
 extern crate diesel;
@@ -13,11 +18,12 @@ use std::env;
 
 use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
 use crate::db::applications::threads::create::create_thread;
-use crate::db::applications::threads::read::read_threads;
 use crate::db::applications::users::signin::signin;
 use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
+use crate::routes::threads::read::threads_read;
 use crate::routes::users::signin;
+use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse, GET};
 use crate::util::http_client::HttpClient;
 use actix_cors::Cors;
 use serde::Serialize;
@@ -36,7 +42,7 @@ struct UserMessage {
     gh_id: String,
 }
 
-fn get_auth_from_header(req: HttpRequest) -> Option<String> {
+fn get_auth_from_header(req: ActixHttpRequest) -> Option<String> {
     let auth = req.headers().get("Authorization");
     let auth = match auth {
         Some(a) => Some(a.to_str().unwrap().replace("Bearer ", "")),
@@ -46,13 +52,37 @@ fn get_auth_from_header(req: HttpRequest) -> Option<String> {
     auth
 }
 
-async fn dispatch_signin(req: HttpRequest) -> impl Responder {
+fn actix_request_into_http_request(req: ActixHttpRequest) -> HttpRequest {
+    HttpRequest {
+        path: req.path().to_string(),
+        method: match req.method() {
+            &ActixMethod::GET => HttpRequestMethod::GET,
+            // TODO
+            _ => panic!("todo task; HTTP Request Method"),
+        },
+    }
+}
+
+fn http_response_into_actix_response(res: HttpResponse) -> ActixHttpResponse {
+    let mut base_response = match res.status {
+        200 => ActixHttpResponse::Ok(),
+        500 => ActixHttpResponse::InternalServerError(),
+        // TODO
+        _ => ActixHttpResponse::InternalServerError(),
+    };
+
+    base_response
+        .content_type("application/json")
+        .body(res.body)
+}
+
+async fn dispatch_signin(req: ActixHttpRequest) -> impl Responder {
     let connection = establish_connection();
     let idToken = get_auth_from_header(req);
     let idToken = match idToken {
         Some(token) => token,
         None => {
-            return HttpResponse::BadRequest().json(ErrMessage {
+            return ActixHttpResponse::BadRequest().json(ErrMessage {
                 message: "Authorization header field must be exist with /signin request"
                     .to_string(),
             });
@@ -66,23 +96,23 @@ async fn dispatch_signin(req: HttpRequest) -> impl Responder {
     let user = match user {
         Some(i) => i,
         None => {
-            return HttpResponse::BadRequest().json(ErrMessage {
+            return ActixHttpResponse::BadRequest().json(ErrMessage {
                 message: "There is no user, please signup before signin".to_string(),
             });
         }
     };
 
-    HttpResponse::Ok().json(UserMessage {
+    ActixHttpResponse::Ok().json(UserMessage {
         gh_id: user.gh_user_id,
     })
 }
 
-async fn dispatch_signup(req: HttpRequest) -> impl Responder {
+async fn dispatch_signup(req: ActixHttpRequest) -> impl Responder {
     let idToken = get_auth_from_header(req);
     let idToken = match idToken {
         Some(token) => token,
         None => {
-            return HttpResponse::BadRequest().json(ErrMessage {
+            return ActixHttpResponse::BadRequest().json(ErrMessage {
                 message: "Authorization header field must be exist with /signup request"
                     .to_string(),
             });
@@ -96,11 +126,11 @@ async fn dispatch_signup(req: HttpRequest) -> impl Responder {
     let user = signup(gh_username, connection);
 
     match user {
-        Ok(user) => HttpResponse::Ok().json(UserMessage {
+        Ok(user) => ActixHttpResponse::Ok().json(UserMessage {
             gh_id: user.gh_user_id,
         }),
         Err(_) => {
-            return HttpResponse::InternalServerError().json(ErrMessage {
+            return ActixHttpResponse::InternalServerError().json(ErrMessage {
                 message: "oops!! signup was failed.".to_string(),
             });
         }
@@ -119,10 +149,10 @@ async fn pos() -> impl Responder {
     "dekita"
 }
 
-async fn asdf() -> impl Responder {
-    let connection = establish_connection();
-    let threads = read_threads(-1, connection).unwrap();
-    format!("title: {:?}", threads[0].title)
+async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {
+    let request = actix_request_into_http_request(req);
+    let response = threads_read(request);
+    http_response_into_actix_response(response)
 }
 
 async fn index() -> impl Responder {
@@ -148,10 +178,10 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .route("/", web::get().to(index))
             .route("/async", web::get().to(async_hello))
-            .route("/threads", web::get().to(asdf))
             .route("/post_threads", web::get().to(pos))
             .route("/signin", web::get().to(dispatch_signin))
             .route("/signup", web::post().to(dispatch_signup))
+            .route("/threads/read", web::get().to(dispatch_threads_read))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
