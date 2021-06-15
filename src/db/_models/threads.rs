@@ -4,6 +4,7 @@ use std::time::SystemTime;
 pub struct Thread {
     pub id: i32,
     pub title: String,
+    pub slug: String,
     pub content: String,
     pub published: bool,
     pub is_open: bool,

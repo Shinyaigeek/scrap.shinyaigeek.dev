@@ -10,6 +10,7 @@ use std::time::SystemTime;
 #[table_name = "threads"]
 pub struct NewThread {
     pub title: String,
+    pub slug: String,
     pub content: String,
     pub published: bool,
 }
