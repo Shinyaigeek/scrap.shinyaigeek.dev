@@ -8,9 +8,6 @@ function withVanillaExtract(pluginOptions = {}) {
    */
   return (nextConfig = {}) => {
     return {
-      future: {
-        webpack5: true,
-      },
       webpack(config, options) {
         const { dev, isServer } = options;
 
