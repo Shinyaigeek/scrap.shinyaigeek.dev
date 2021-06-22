@@ -1,5 +1,8 @@
+import { useAuthUser } from "../components/common/useAuthUser/useAuthUser";
+
 function HomePage() {
-  return <div>Welcome to Next.js!</div>;
+  const { user } = useAuthUser();
+  return <div>Welcome to Next.js! {user && user.email}</div>;
 }
 
 export default HomePage;

@@ -1,55 +1,81 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-import { useEffect, useState } from "react";
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+  VFC,
+} from "react";
+import { AuthUserContext, AuthUserUpdateContext } from "./context";
+import { authUserActions } from "./reducer";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTHDOMAIN,
 };
 
-export const useAuthUser = () => {
-  const [token, setToken] = useState<string>("");
-  const [user, setUser] = useState<firebase.User>();
-  let factory: firebase.auth.Auth;
-  const provider = new firebase.auth.GithubAuthProvider();
-  useEffect(() => {
+const [provider, factory] = (() => {
+  if (typeof window !== "undefined") {
+    const provider = new firebase.auth.GithubAuthProvider();
     firebase.initializeApp(firebaseConfig);
-    factory = firebase.auth();
-  }, []);
+    const factory = firebase.auth();
+
+    return [provider, factory] as const;
+  }
+
+  return [undefined, undefined] as const;
+})();
+
+export const useAuthUser = () => {
+  const user = useContext(AuthUserContext);
+  const dispatch = useContext(AuthUserUpdateContext);
 
   const login = async () => {
     if (factory) {
+      dispatch(authUserActions.loginAction());
       factory.signInWithPopup(provider).then(async (user) => {
         console.log(user);
         const token = await user.user.getIdToken();
         const asdf = await fetch(`http://localhost:8080/signin`, {
           headers: {
-            Authorization: token
+            Authorization: token,
           },
-          mode: "cors"
-        })
+          mode: "cors",
+        });
         const j = await asdf.json();
-        console.log(j)
-        setUser(user.user);
+        dispatch(
+          authUserActions.successLoginAction({
+            token,
+            user: user.user,
+          })
+        );
       });
     }
   };
 
   const signup = async () => {
     if (factory) {
+      dispatch(authUserActions.signupAction());
       factory.signInWithPopup(provider).then(async (user) => {
         console.log(user);
         const token = await user.user.getIdToken();
         const asdf = await fetch(`http://localhost:8080/signup`, {
           headers: {
-            Authorization: token
+            Authorization: token,
           },
           mode: "cors",
-          method: "POST"
-        })
+          method: "POST",
+        });
         const j = await asdf.json();
-        console.log(j)
-        setUser(user.user);
+        dispatch(
+          authUserActions.successSignUpAction({
+            token,
+            user: user.user,
+          })
+        );
       });
     }
   };
@@ -57,9 +83,15 @@ export const useAuthUser = () => {
   const logout = async () => {
     if (factory) {
       factory.signOut();
-      setUser(null);
+      dispatch(authUserActions.logoutAction());
     }
   };
 
-  return [user, login, signup, logout] as const;
+  return {
+    user: user.user,
+    token: user.token,
+    login,
+    signup,
+    logout,
+  };
 };
