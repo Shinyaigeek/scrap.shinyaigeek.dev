@@ -174,7 +174,7 @@ async fn main() -> std::io::Result<()> {
             .route("/post_threads", web::get().to(pos))
             .route("/signin", web::get().to(dispatch_signin))
             .route("/signup", web::post().to(dispatch_signup))
-            .route("/threads/read", web::get().to(dispatch_threads_read))
+            .route("/threads", web::get().to(dispatch_threads_read))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
