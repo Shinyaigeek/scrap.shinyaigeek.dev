@@ -159,12 +159,6 @@ async fn index() -> impl Responder {
     "Hello, Rocket!"
 }
 
-async fn async_hello() -> impl Responder {
-    let client = HttpClient::new();
-    let name = get_gh_info_with_token("eyJhbGciOiJSUzI1NiIsImtpZCI6ImFiMGNiMTk5Zjg3MGYyOGUyOTg5YWI0ODFjYzJlNDdlMGUyY2MxOWQiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU2hpbm9idSBIYXlhc2hpIiwicGljdHVyZSI6Imh0dHBzOi8vYXZhdGFycy5naXRodWJ1c2VyY29udGVudC5jb20vdS80Mjc0MjA1Mz92PTQiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc2NyYXAtc2hpbnlhaWdlZWstZGV2IiwiYXVkIjoic2NyYXAtc2hpbnlhaWdlZWstZGV2IiwiYXV0aF90aW1lIjoxNjIyOTcwMzMwLCJ1c2VyX2lkIjoibnN5bkt1Z1c5RVNwUzZrWXR0UmVpNVVoVm1IMyIsInN1YiI6Im5zeW5LdWdXOUVTcFM2a1l0dFJlaTVVaFZtSDMiLCJpYXQiOjE2MjI5NzAzMzAsImV4cCI6MTYyMjk3MzkzMCwiZW1haWwiOiJtZUBzaGlueWFpZ2Vlay5kZXYiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ2l0aHViLmNvbSI6WyI0Mjc0MjA1MyJdLCJlbWFpbCI6WyJtZUBzaGlueWFpZ2Vlay5kZXYiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnaXRodWIuY29tIn19.fyQixQAUamGfmzn4Z-2h6AliixEwPEbVnTcs1CWKDKcMj9AnYYkNHCRdQb3v39aZQAtoJIakrvD7qIBeBmZmydLmbsB38I2GxiNJ6EHEsm_kXGpcpjLblKyQWTf5njvvrxff8hRdB_ODHFw-mnlELIagLNboD00aPT-i3kTzRBMjKKrbmSKJM47XSxtDKGcnitx-jOrWUA-XTVbrvfCMaNF7I4JD6HssiGn-vxUp9D09SpL9L6JVCCsaTTc-TCQBl94T19qBXonzW2UMhzZSKFtFyHgR3DNZWsiKF1mRgN6xIhwTuOT7WOUhUBnrW7jsYxVrhLGYhp7MsiP7GAuWMA".to_string(), client).await;
-    format!("Hello, Rocket! I send this message 1s {}", name)
-}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -177,7 +171,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .route("/", web::get().to(index))
-            .route("/async", web::get().to(async_hello))
             .route("/post_threads", web::get().to(pos))
             .route("/signin", web::get().to(dispatch_signin))
             .route("/signup", web::post().to(dispatch_signup))
