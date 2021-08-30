@@ -6,9 +6,10 @@ export const Header: VFC = function () {
   const { user, login, signup } = useAuthUser();
   return (
     <header className={hero}>
-      scrap.shinyaigeek.dev{" "}
+      scrap.shinyaigeek.dev
       <button onClick={login}>login {user && user.email}</button>
       <button onClick={signup}>signup </button>
+      {user && user.uid}
     </header>
   );
 };
