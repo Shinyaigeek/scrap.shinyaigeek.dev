@@ -1,7 +1,7 @@
 import { AppPropsType } from "next/dist/next-server/lib/utils";
 import { VFC } from "react";
-import { Header } from "../components/common/Header/Header";
-import { AuthUserContextProvider } from "../components/common/useAuthUser/context";
+import { Header } from "../components/ui/Header/Header";
+import { AuthUserContextProvider } from "../hooks/useAuthUser/context";
 
 const App: VFC<{
   Component: VFC<AppPropsType>;

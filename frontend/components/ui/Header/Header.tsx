@@ -1,6 +1,6 @@
 import { VFC } from "react";
 import Link from "next/link";
-import { useAuthUser } from "../useAuthUser/useAuthUser";
+import { useAuthUser } from "../../../hooks/useAuthUser/useAuthUser";
 import { hero } from "./Header.css";
 
 export const Header: VFC = function () {
