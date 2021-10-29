@@ -17,11 +17,11 @@ use dotenv::dotenv;
 use std::env;
 
 use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
-use crate::db::applications::threads::create::create_thread;
 use crate::db::applications::users::signin::signin;
 use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::threads::read::threads_read;
+use crate::routes::threads::create::threads_create;
 use crate::routes::users::signin;
 use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse, GET};
 use crate::util::http_client::HttpClient;
@@ -137,16 +137,10 @@ async fn dispatch_signup(req: ActixHttpRequest) -> impl Responder {
     }
 }
 
-async fn pos() -> impl Responder {
-    let connection = establish_connection();
-    create_thread(
-        "asdf".to_string(),
-        "nya-n".to_string(),
-        "hogehoge".to_string(),
-        true,
-        connection,
-    );
-    "dekita"
+async fn dispatch_threads_create(req: ActixHttpRequest) -> impl Responder {
+    let request = actix_request_into_http_request(req);
+    let response = threads_create(request);
+    http_response_into_actix_response(response)
 }
 
 async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {
@@ -171,10 +165,10 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .route("/", web::get().to(index))
-            .route("/post_threads", web::get().to(pos))
             .route("/signin", web::get().to(dispatch_signin))
             .route("/signup", web::post().to(dispatch_signup))
             .route("/threads", web::get().to(dispatch_threads_read))
+            .route("/threads/create", web::post().to(dispatch_threads_create))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
