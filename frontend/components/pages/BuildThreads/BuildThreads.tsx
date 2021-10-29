@@ -1,3 +1,11 @@
+import { useBuildThreadForm } from "../../../hooks/useBuildThreadForm/useBuildThreadForm";
+
 export const BuildThreads: React.FC = function () {
-  return <div>editorf</div>;
+  const [Form] = useBuildThreadForm();
+  return (
+    <div>
+      editorf:
+      <Form />
+    </div>
+  );
 };
