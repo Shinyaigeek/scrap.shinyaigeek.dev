@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useAuthUser } from "../components/common/useAuthUser/useAuthUser";
+import { useAuthUser } from "../hooks/useAuthUser/useAuthUser";
 
 interface Props {
   posts: {

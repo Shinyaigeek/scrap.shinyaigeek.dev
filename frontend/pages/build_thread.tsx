@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
-import { useAuthUser } from "../components/common/useAuthUser/useAuthUser";
+import { BuildThreads } from "../components/pages/BuildThreads/BuildThreads";
+import { useAuthUser } from "../hooks/useAuthUser/useAuthUser";
 
 interface Props {
   posts: {
@@ -13,17 +14,21 @@ interface Props {
 function HomePage({ posts }: Props) {
   const { user } = useAuthUser();
 
-  useEffect(() => {
-    if (!user) {
-      window.location.href = "/";
-    }
+  // useEffect(() => {
+  //   if (!user) {
+  //     window.location.href = "/";
+  //   }
 
-    if (user.email !== "me@shinyaigeek.dev") {
-      window.location.href = "/";
-    }
-  }, [user]);
+  //   if (user.email !== "me@shinyaigeek.dev") {
+  //     window.location.href = "/";
+  //   }
+  // }, [user]);
 
-  return <>editor</>;
+  return (
+    <>
+      <BuildThreads />
+    </>
+  );
 }
 
 export default HomePage;
