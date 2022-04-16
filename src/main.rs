@@ -1,7 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 use actix_web::{
-    get, http, web, App, HttpRequest as ActixHttpRequest, HttpResponse as ActixHttpResponse,
+    get, post, http, web, dev, App, HttpRequest as ActixHttpRequest, HttpResponse as ActixHttpResponse,
     HttpServer, Responder,
 };
 
