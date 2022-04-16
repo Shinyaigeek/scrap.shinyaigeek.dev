@@ -7,7 +7,7 @@ pub const POST: &str = "POST";
 
 pub enum HttpRequestMethod {
     GET,
-    POST
+    POST,
 }
 
 pub struct HttpRequest {

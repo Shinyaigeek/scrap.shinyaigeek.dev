@@ -43,6 +43,11 @@ struct UserMessage {
 }
 
 #[derive(Serialize, Deserialize)]
+struct ThreadSlug {
+    slug: String,
+}
+
+#[derive(Serialize, Deserialize)]
 struct Thread {
     title: String,
     slug: String,
@@ -160,8 +165,7 @@ async fn dispatch_threads_create(
         Some(auth) => auth,
         None => {
             return ActixHttpResponse::BadRequest().json(ErrMessage {
-                message: "Authorization header should be exist"
-                    .to_string(),
+                message: "Authorization header should be exist".to_string(),
             });
         }
     };
@@ -174,7 +178,7 @@ async fn dispatch_threads_create(
             message: "You are not allowed to create thread".to_string(),
         });
     }
-    
+
     let response = threads_create(
         payload.title.to_string(),
         payload.slug.to_string(),
@@ -182,6 +186,12 @@ async fn dispatch_threads_create(
         payload.published,
     );
     http_response_into_actix_response(response)
+}
+
+async fn dispatch_thread_read(req: ActixHttpRequest, body: web::Json<ThreadSlug>) -> impl Responder {
+    return ActixHttpResponse::InternalServerError().json(ErrMessage {
+        message: "todo".to_string(),
+    });
 }
 
 async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {
@@ -210,6 +220,7 @@ async fn main() -> std::io::Result<()> {
             .route("/signup", web::post().to(dispatch_signup))
             .route("/threads", web::get().to(dispatch_threads_read))
             .route("/threads/create", web::post().to(dispatch_threads_create))
+            .route("/threads/{slug}", web::get().to(dispatch_thread_read))
     })
     .bind(("127.0.0.1", 8080))?
     .run()

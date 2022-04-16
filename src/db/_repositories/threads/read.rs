@@ -18,3 +18,9 @@ pub fn read_threads(cnt: i32, connection: DbConnection) -> Result<Vec<Thread>, E
         .order(threads::published_at.asc())
         .load::<Thread>(&connection)
 }
+
+pub fn read_thread(slug: String, connection: DbConnection) -> Result<Vec<Thread>, Error> {
+    threads::dsl::threads
+        .filter((threads::slug.eq(slug)))
+        .load::<Thread>(&connection)
+}
