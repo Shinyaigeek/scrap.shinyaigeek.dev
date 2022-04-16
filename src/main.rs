@@ -1,8 +1,8 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 use actix_web::{
-    get, post, http, web, dev, App, HttpRequest as ActixHttpRequest, HttpResponse as ActixHttpResponse,
-    HttpServer, Responder,
+    dev, get, http, post, web, App, HttpRequest as ActixHttpRequest,
+    HttpResponse as ActixHttpResponse, HttpServer, Responder,
 };
 
 use actix_web::http::Method as ActixMethod;
@@ -26,20 +26,28 @@ use crate::routes::users::signin;
 use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse, GET};
 use crate::util::http_client::HttpClient;
 use actix_cors::Cors;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 mod auth;
 mod db;
 mod routes;
 mod util;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct ErrMessage {
     message: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct UserMessage {
     gh_id: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct Thread {
+    title: String,
+    slug: String,
+    content: String,
+    published: bool,
 }
 
 fn get_auth_from_header(req: ActixHttpRequest) -> Option<String> {
@@ -141,9 +149,17 @@ async fn dispatch_signup(req: ActixHttpRequest) -> impl Responder {
     }
 }
 
-async fn dispatch_threads_create(req: ActixHttpRequest) -> impl Responder {
+async fn dispatch_threads_create(
+    req: ActixHttpRequest,
+    payload: web::Json<Thread>,
+) -> impl Responder {
     let request = actix_request_into_http_request(req);
-    let response = threads_create(request);
+    let response = threads_create(
+        payload.title.to_string(),
+        payload.slug.to_string(),
+        payload.content.to_string(),
+        payload.published,
+    );
     http_response_into_actix_response(response)
 }
 
