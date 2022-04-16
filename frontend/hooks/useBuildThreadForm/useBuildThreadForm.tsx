@@ -18,7 +18,13 @@ export const useBuildThreadForm = function () {
 
   const onSubmit = useCallback(
     handleSubmit((data) => {
-      console.log(data);
+      fetch("http://localhost:8080/threads/create", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
     }),
     []
   );

@@ -65,6 +65,7 @@ fn actix_request_into_http_request(req: ActixHttpRequest) -> HttpRequest {
         path: req.path().to_string(),
         method: match req.method() {
             &ActixMethod::GET => HttpRequestMethod::GET,
+            &ActixMethod::POST => HttpRequestMethod::POST,
             // TODO
             _ => panic!("todo task; HTTP Request Method"),
         },
@@ -153,6 +154,7 @@ async fn dispatch_threads_create(
     req: ActixHttpRequest,
     payload: web::Json<Thread>,
 ) -> impl Responder {
+    println!("hey");
     let request = actix_request_into_http_request(req);
     let response = threads_create(
         payload.title.to_string(),

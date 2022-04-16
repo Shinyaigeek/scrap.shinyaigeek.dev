@@ -3,9 +3,11 @@ pub mod users;
 mod util;
 
 pub const GET: &str = "GET";
+pub const POST: &str = "POST";
 
 pub enum HttpRequestMethod {
     GET,
+    POST
 }
 
 pub struct HttpRequest {
