@@ -17,7 +17,7 @@ function HomePage({ posts }: Props) {
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>
-            <Link href="/post/[slug]" as={`/post/${post.slug}`}>
+            <Link href="/threads/[slug]" as={`/threads/${post.slug}`}>
               <a>{post.title}</a>
             </Link>
           </li>

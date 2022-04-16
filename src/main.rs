@@ -190,7 +190,7 @@ async fn dispatch_threads_create(
 
 async fn dispatch_thread_read(
     req: ActixHttpRequest,
-    body: web::Json<ThreadSlug>,
+    body: web::Path<ThreadSlug>,
 ) -> impl Responder {
     let request = actix_request_into_http_request(req);
     let response = thread_read(request, body.slug.to_string());
