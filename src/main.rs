@@ -156,6 +156,25 @@ async fn dispatch_threads_create(
 ) -> impl Responder {
     println!("hey");
     let request = actix_request_into_http_request(req);
+    let authorization = match request.authorization {
+        Some(auth) => auth,
+        None => {
+            return ActixHttpResponse::BadRequest().json(ErrMessage {
+                message: "Authorization header should be exist"
+                    .to_string(),
+            });
+        }
+    };
+    let client = HttpClient::new();
+    let gh_username = get_gh_info_with_token(authorization, client).await;
+    println!("{}", gh_username);
+
+    if &gh_username != "\"Shinyaigeek\"" {
+        return ActixHttpResponse::BadRequest().json(ErrMessage {
+            message: "You are not allowed to create thread".to_string(),
+        });
+    }
+    
     let response = threads_create(
         payload.title.to_string(),
         payload.slug.to_string(),
