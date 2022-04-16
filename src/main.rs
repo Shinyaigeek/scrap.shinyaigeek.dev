@@ -21,7 +21,7 @@ use crate::db::applications::users::signin::signin;
 use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::threads::create::threads_create;
-use crate::routes::threads::read::threads_read;
+use crate::routes::threads::read::{thread_read, threads_read};
 use crate::routes::users::signin;
 use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse, GET};
 use crate::util::http_client::HttpClient;
@@ -188,10 +188,13 @@ async fn dispatch_threads_create(
     http_response_into_actix_response(response)
 }
 
-async fn dispatch_thread_read(req: ActixHttpRequest, body: web::Json<ThreadSlug>) -> impl Responder {
-    return ActixHttpResponse::InternalServerError().json(ErrMessage {
-        message: "todo".to_string(),
-    });
+async fn dispatch_thread_read(
+    req: ActixHttpRequest,
+    body: web::Json<ThreadSlug>,
+) -> impl Responder {
+    let request = actix_request_into_http_request(req);
+    let response = thread_read(request, body.slug.to_string());
+    http_response_into_actix_response(response)
 }
 
 async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {

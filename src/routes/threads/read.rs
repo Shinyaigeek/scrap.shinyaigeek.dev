@@ -1,4 +1,4 @@
-use crate::db::applications::threads::read::read_threads;
+use crate::db::applications::threads::read::{read_thread, read_threads};
 use crate::db::connection::establish::establish_connection;
 use crate::routes::{HttpRequest, HttpResponse};
 
@@ -41,6 +41,40 @@ pub fn threads_read(req: HttpRequest) -> HttpResponse {
                         body.push_str("]");
                         body
                     }
+                },
+            }
+        }
+
+        Err(_) => {
+            return HttpResponse {
+                status: 500,
+                body: make_error_response_body(500),
+            }
+        }
+    }
+}
+
+pub fn thread_read(req: HttpRequest, slug: String) -> HttpResponse {
+    let connection = establish_connection();
+    let thread = read_thread(slug, connection);
+
+    match thread {
+        Ok(thread) => {
+            return HttpResponse {
+                status: 200,
+                body: {
+                    let mut body = String::new();
+                    body.push_str(&format!(
+                        "{{
+                                \"title\": {:?},
+                                \"slug\": {:?},
+                                \"content\": {:?},
+                                \"is_open\": {:?}
+                            }}",
+                        thread.title, thread.slug, thread.content, thread.is_open
+                    ));
+
+                    body
                 },
             }
         }

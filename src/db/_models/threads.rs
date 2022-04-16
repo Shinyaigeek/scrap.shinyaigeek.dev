@@ -1,6 +1,6 @@
 use std::time::SystemTime;
 
-#[derive(Queryable)]
+#[derive(Queryable, Clone)]
 pub struct Thread {
     pub id: i32,
     pub title: String,
