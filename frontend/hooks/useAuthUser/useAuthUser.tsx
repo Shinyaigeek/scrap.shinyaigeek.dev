@@ -37,8 +37,9 @@ export const useAuthUser = () => {
     if (factory) {
       dispatch(authUserActions.loginAction());
       factory.signInWithPopup(provider).then(async (user) => {
-        console.log(user);
         const token = await user.user.getIdToken();
+        console.log(token)
+        localStorage.setItem("scrap-shinyaigeek-token", token);
         const asdf = await fetch(`http://localhost:8080/signin`, {
           headers: {
             Authorization: token,

@@ -20,8 +20,8 @@ use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
 use crate::db::applications::users::signin::signin;
 use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
-use crate::routes::threads::read::threads_read;
 use crate::routes::threads::create::threads_create;
+use crate::routes::threads::read::threads_read;
 use crate::routes::users::signin;
 use crate::routes::{HttpRequest, HttpRequestMethod, HttpResponse, GET};
 use crate::util::http_client::HttpClient;
@@ -59,6 +59,10 @@ fn actix_request_into_http_request(req: ActixHttpRequest) -> HttpRequest {
             &ActixMethod::GET => HttpRequestMethod::GET,
             // TODO
             _ => panic!("todo task; HTTP Request Method"),
+        },
+        authorization: match req.head().headers.get("Authorization") {
+            Some(a) => Some(a.to_str().unwrap().replace("Bearer ", "")),
+            None => None,
         },
     }
 }
