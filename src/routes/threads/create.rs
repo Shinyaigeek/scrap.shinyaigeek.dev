@@ -1,4 +1,5 @@
-use crate::db::applications::threads::create::create_thread;
+// TODO
+use crate::db::applications::threads::read::read_threads;
 use crate::db::connection::establish::establish_connection;
 use crate::routes::{HttpRequest, HttpResponse};
 
