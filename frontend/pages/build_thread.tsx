@@ -12,18 +12,6 @@ interface Props {
 }
 
 function HomePage({ posts }: Props) {
-  const { user } = useAuthUser();
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     window.location.href = "/";
-  //   }
-
-  //   if (user.email !== "me@shinyaigeek.dev") {
-  //     window.location.href = "/";
-  //   }
-  // }, [user]);
-
   return (
     <>
       <BuildThreads />

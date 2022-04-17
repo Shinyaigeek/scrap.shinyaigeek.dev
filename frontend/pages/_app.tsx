@@ -1,21 +1,17 @@
 import { AppPropsType } from "next/dist/next-server/lib/utils";
 import { VFC } from "react";
 import { Header } from "../components/ui/Header/Header";
-import { AuthUserContextProvider } from "../hooks/useAuthUser/context";
+import { SessionProvider } from "next-auth/react";
 
 const App: VFC<{
   Component: VFC<AppPropsType>;
   pageProps: AppPropsType;
-}> = function ({ Component, pageProps }) {
+}> = function ({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <>
-      <AuthUserContextProvider>
-        <>
-          <Header />
-          <Component {...pageProps} />
-        </>
-      </AuthUserContextProvider>
-    </>
+    <SessionProvider session={session}>
+      <Header />
+      <Component {...pageProps} />
+    </SessionProvider>
   );
 };
 

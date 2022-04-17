@@ -9,6 +9,7 @@ const ENDPOINT: &str = "https://identitytoolkit.googleapis.com/v1/accounts:looku
 pub async fn get_gh_info_with_token(token: String, client: HttpClient) -> String {
     let mut payload = HashMap::new();
     dotenv().ok();
+    println!("token: {}", token);
     payload.insert("idToken".to_string(), token);
     let res = client
         .post(

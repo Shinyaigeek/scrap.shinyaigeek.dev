@@ -17,21 +17,17 @@ export const useBuildThreadForm = function () {
     formState: { errors },
   } = useForm<ThreadForm>();
 
-  const { token } = useAuthUser();
-
   const onSubmit = useCallback(
     handleSubmit((data) => {
-      console.log(token)
-      fetch("http://localhost:8080/threads/create", {
+      fetch("/api/threads/create", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${token}`,
         },
       });
     }),
-    [token]
+    []
   );
 
   const Form = useCallback(() => {
@@ -44,7 +40,7 @@ export const useBuildThreadForm = function () {
         <input type="submit" />
       </form>
     );
-  }, [token]);
+  }, []);
 
   return [Form];
 };

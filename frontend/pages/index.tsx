@@ -13,7 +13,7 @@ function HomePage({ posts }: Props) {
   const { user } = useAuthUser();
   return (
     <>
-      <div>Welcome to Next.js! {user && user.userId}</div>
+      <div>Welcome to Next.js! {user?.user && user.user.name}</div>
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>
