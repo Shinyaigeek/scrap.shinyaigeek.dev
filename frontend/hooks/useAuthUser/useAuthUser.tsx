@@ -1,5 +1,10 @@
-import firebase from "firebase/app";
-import "firebase/auth";
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GithubAuthProvider,
+  signInWithPopup,
+  getAdditionalUserInfo,
+} from "firebase/auth";
 import {
   createContext,
   FC,
@@ -19,9 +24,9 @@ const firebaseConfig = {
 
 const [provider, factory] = (() => {
   if (typeof window !== "undefined") {
-    const provider = new firebase.auth.GithubAuthProvider();
-    firebase.initializeApp(firebaseConfig);
-    const factory = firebase.auth();
+    const provider = new GithubAuthProvider();
+    initializeApp(firebaseConfig);
+    const factory = getAuth();
 
     return [provider, factory] as const;
   }
@@ -36,22 +41,16 @@ export const useAuthUser = () => {
   const login = async () => {
     if (factory) {
       dispatch(authUserActions.loginAction());
-      factory.signInWithPopup(provider).then(async (user) => {
+      signInWithPopup(factory, provider).then(async (user) => {
         const token = await user.user.getIdToken();
-        localStorage.setItem("scrap-shinyaigeek-token", token);
-        const asdf = await fetch(`http://localhost:8080/signin`, {
-          headers: {
-            Authorization: token,
-          },
-          mode: "cors",
-        });
-        const json = await asdf.json();
+
+        const { username: githubId } = getAdditionalUserInfo(user);
         dispatch(
           authUserActions.successLoginAction({
             token,
             user: {
-              userId: json.gh_id,
-              avatar: `https://avatars.githubusercontent.com/${json.gh_id}`,
+              userId: githubId,
+              avatar: `https://avatars.githubusercontent.com/${githubId}`,
             },
           })
         );
@@ -62,23 +61,16 @@ export const useAuthUser = () => {
   const signup = async () => {
     if (factory) {
       dispatch(authUserActions.signupAction());
-      factory.signInWithPopup(provider).then(async (user) => {
+      signInWithPopup(factory, provider).then(async (user) => {
         console.log(user);
         const token = await user.user.getIdToken();
-        const asdf = await fetch(`http://localhost:8080/signup`, {
-          headers: {
-            Authorization: token,
-          },
-          mode: "cors",
-          method: "POST",
-        });
-        const json = await asdf.json();
+        const { username: githubId } = getAdditionalUserInfo(user);
         dispatch(
           authUserActions.successSignUpAction({
             token,
             user: {
-              userId: json.gh_id,
-              avatar: `https://avatars.githubusercontent.com/${json.gh_id}`,
+              userId: githubId,
+              avatar: `https://avatars.githubusercontent.com/${githubId}`,
             },
           })
         );
