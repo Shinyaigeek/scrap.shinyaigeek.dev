@@ -239,6 +239,8 @@ async fn main() -> std::io::Result<()> {
             .route("/threads", web::get().to(dispatch_threads_read))
             .route("/threads/create", web::post().to(dispatch_threads_create))
             .route("/threads/{slug}", web::get().to(dispatch_thread_read))
+            .route("/comments", web::get().to(dispatch_comments_read))
+            .route("/comments/create", web::post().to(dispatch_comments_create))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
