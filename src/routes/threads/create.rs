@@ -23,9 +23,10 @@ pub fn threads_create(
                                 \"title\": {:?},
                                 \"slug\": {:?},
                                 \"content\": {:?},
-                                \"is_open\": {:?}
+                                \"is_open\": {:?},
+                                \"id\": {:?}
                             }}",
-                        thread.title, thread.slug, thread.content, thread.is_open
+                        thread.title, thread.slug, thread.content, thread.is_open, thread.id
                     ));
 
                     body

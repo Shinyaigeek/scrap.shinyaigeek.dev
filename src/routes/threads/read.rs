@@ -27,9 +27,14 @@ pub fn threads_read(req: HttpRequest) -> HttpResponse {
                                 \"title\": {:?},
                                 \"slug\": {:?},
                                 \"content\": {:?},
-                                \"is_open\": {:?}
+                                \"is_open\": {:?},
+                                \"id\": {:?}
                             }}",
-                                thread.title, thread.slug, thread.content, thread.is_open
+                                thread.title,
+                                thread.slug,
+                                thread.content,
+                                thread.is_open,
+                                thread.id
                             ));
 
                             if idx < threads_len - 1 {
@@ -69,9 +74,10 @@ pub fn thread_read(req: HttpRequest, slug: String) -> HttpResponse {
                                 \"title\": {:?},
                                 \"slug\": {:?},
                                 \"content\": {:?},
-                                \"is_open\": {:?}
+                                \"is_open\": {:?},
+                                \"id\": {:?}
                             }}",
-                        thread.title, thread.slug, thread.content, thread.is_open
+                        thread.title, thread.slug, thread.content, thread.is_open, thread.id
                     ));
 
                     body
