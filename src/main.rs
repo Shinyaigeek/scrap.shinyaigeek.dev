@@ -20,6 +20,8 @@ use crate::auth::get_gh_info_with_token::get_gh_info_with_token;
 use crate::db::applications::users::signin::signin;
 use crate::db::applications::users::signup::signup;
 use crate::db::connection::establish::establish_connection;
+use crate::routes::comments::create::comment_create;
+use crate::routes::comments::read::comments_read;
 use crate::routes::threads::create::threads_create;
 use crate::routes::threads::read::{thread_read, threads_read};
 use crate::routes::users::signin;
@@ -53,6 +55,18 @@ struct Thread {
     slug: String,
     content: String,
     published: bool,
+}
+
+#[derive(Serialize, Deserialize)]
+struct Comment {
+    content: String,
+    author: String,
+    thread: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct CommentQuery {
+    thread: i32,
 }
 
 fn get_auth_from_header(req: ActixHttpRequest) -> Option<String> {
@@ -180,6 +194,27 @@ async fn dispatch_thread_read(
 async fn dispatch_threads_read(req: ActixHttpRequest) -> impl Responder {
     let request = actix_request_into_http_request(req);
     let response = threads_read(request);
+    http_response_into_actix_response(response)
+}
+
+async fn dispatch_comments_create(
+    req: ActixHttpRequest,
+    payload: web::Json<Comment>,
+) -> impl Responder {
+    let response = comment_create(
+        payload.content.to_string(),
+        payload.author.to_string(),
+        payload.thread.parse::<i32>().unwrap(),
+    );
+    http_response_into_actix_response(response)
+}
+
+async fn dispatch_comments_read(
+    req: ActixHttpRequest,
+    query: web::Query<CommentQuery>,
+) -> impl Responder {
+    let request = actix_request_into_http_request(req);
+    let response = comments_read(request, query.thread);
     http_response_into_actix_response(response)
 }
 
