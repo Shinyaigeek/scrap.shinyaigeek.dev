@@ -1,8 +1,9 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import { User } from "./context";
 
 export interface AuthUserState {
-  user: firebase.User | null;
+  user: User | null;
   token: string | null;
 }
 

@@ -38,7 +38,6 @@ export const useAuthUser = () => {
       dispatch(authUserActions.loginAction());
       factory.signInWithPopup(provider).then(async (user) => {
         const token = await user.user.getIdToken();
-        console.log(token)
         localStorage.setItem("scrap-shinyaigeek-token", token);
         const asdf = await fetch(`http://localhost:8080/signin`, {
           headers: {
@@ -46,11 +45,14 @@ export const useAuthUser = () => {
           },
           mode: "cors",
         });
-        const j = await asdf.json();
+        const json = await asdf.json();
         dispatch(
           authUserActions.successLoginAction({
             token,
-            user: user.user,
+            user: {
+              userId: json.gh_id,
+              avatar: `https://avatars.githubusercontent.com/${json.gh_id}`,
+            },
           })
         );
       });
@@ -70,11 +72,14 @@ export const useAuthUser = () => {
           mode: "cors",
           method: "POST",
         });
-        const j = await asdf.json();
+        const json = await asdf.json();
         dispatch(
           authUserActions.successSignUpAction({
             token,
-            user: user.user,
+            user: {
+              userId: json.gh_id,
+              avatar: `https://avatars.githubusercontent.com/${json.gh_id}`,
+            },
           })
         );
       });

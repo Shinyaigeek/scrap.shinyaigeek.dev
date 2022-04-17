@@ -6,6 +6,11 @@ import {
   initialAuthUserState,
 } from "./reducer";
 
+export interface User {
+  avatar: string;
+  userId: string;
+}
+
 export const AuthUserContext = createContext<AuthUserState | undefined>(
   undefined
 );
