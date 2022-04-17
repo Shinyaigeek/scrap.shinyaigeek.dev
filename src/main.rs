@@ -61,7 +61,7 @@ struct Thread {
 struct Comment {
     content: String,
     author: String,
-    thread: String,
+    thread: i32,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -201,10 +201,13 @@ async fn dispatch_comments_create(
     req: ActixHttpRequest,
     payload: web::Json<Comment>,
 ) -> impl Responder {
+    println!("{:?}", payload.content);
+    println!("{:?}", payload.author);
+    println!("{:?}", payload.thread);
     let response = comment_create(
         payload.content.to_string(),
         payload.author.to_string(),
-        payload.thread.parse::<i32>().unwrap(),
+        payload.thread,
     );
     http_response_into_actix_response(response)
 }

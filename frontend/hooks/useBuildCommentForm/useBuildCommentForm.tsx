@@ -10,7 +10,7 @@ interface CommentForm {
   published: boolean;
 }
 
-export const useBuildCommentForm = function () {
+export const useBuildCommentForm = function (thread: number) {
   const {
     register,
     handleSubmit,
@@ -20,28 +20,28 @@ export const useBuildCommentForm = function () {
 
   const onSubmit = useCallback(
     handleSubmit((data) => {
-      fetch("http://localhost:8080/threads/create", {
+      fetch("/api/comments/create", {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          thread,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
       });
     }),
-    []
+    [thread]
   );
 
   const Form = useCallback(() => {
     return (
       <form onSubmit={onSubmit}>
-        <input {...register("title")} />
-        <input {...register("slug")} />
-        <input type="checkbox" {...register("published")} />
         <textarea {...register("content")} />
         <input type="submit" />
       </form>
     );
-  }, [token]);
+  }, [thread]);
 
   return [Form];
 };

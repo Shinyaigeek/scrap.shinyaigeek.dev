@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE threads (
+CREATE TABLE comments (
   id SERIAL PRIMARY KEY,
   author VARCHAR,
   content TEXT NOT NULL,

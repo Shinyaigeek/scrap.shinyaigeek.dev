@@ -1,4 +1,15 @@
 table! {
+    comments (id) {
+        id -> Int4,
+        author -> Nullable<Varchar>,
+        content -> Text,
+        thread -> Int4,
+        published_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+table! {
     threads (id) {
         id -> Int4,
         slug -> Varchar,
@@ -18,6 +29,7 @@ table! {
 }
 
 allow_tables_to_appear_in_same_query!(
+    comments,
     threads,
     users,
 );
