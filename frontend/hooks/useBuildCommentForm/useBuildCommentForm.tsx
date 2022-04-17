@@ -2,20 +2,22 @@ import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "../useAuthUser/useAuthUser";
 
-interface ThreadForm {
+// TODO
+
+interface CommentForm {
   title: string;
   slug: string;
   content: string;
   published: boolean;
 }
 
-export const useBuildThreadForm = function () {
+export const useBuildCommentForm = function () {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<ThreadForm>();
+  } = useForm<CommentForm>();
 
   const { token } = useAuthUser();
 
