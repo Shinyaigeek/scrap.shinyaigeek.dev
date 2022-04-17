@@ -173,7 +173,7 @@ async fn dispatch_threads_create(
     let gh_username = get_gh_info_with_token(authorization, client).await;
     println!("{}", gh_username);
 
-    if &gh_username != "\"Shinyaigeek\"" {
+    if &gh_username != "Shinyaigeek" {
         return ActixHttpResponse::BadRequest().json(ErrMessage {
             message: "You are not allowed to create thread".to_string(),
         });

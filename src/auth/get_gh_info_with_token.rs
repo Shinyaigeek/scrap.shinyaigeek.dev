@@ -18,5 +18,5 @@ pub async fn get_gh_info_with_token(token: String, client: HttpClient) -> String
         .await;
 
     let json: Value = serde_json::from_str(&res.body).unwrap();
-    json["users"][0]["screenName"].to_string()
+    json["users"][0]["screenName"].to_string().replace("\"", "")
 }
