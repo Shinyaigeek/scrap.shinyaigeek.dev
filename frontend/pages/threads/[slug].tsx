@@ -1,14 +1,17 @@
+import { useAuthUser } from "../../hooks/useAuthUser/useAuthUser";
 interface Props {
   thread: {
     title: string;
     slug: string;
     is_open: boolean;
     content: string;
+    id: number;
   };
 }
 
 function Thread({ thread }: Props) {
   const { title, slug, content } = thread;
+  const { user } = useAuthUser();
   return (
     <>
       <h1>{title}</h1>

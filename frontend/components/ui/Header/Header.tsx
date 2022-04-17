@@ -9,9 +9,9 @@ export const Header: VFC = function () {
   return (
     <header className={hero}>
       scrap.shinyaigeek.dev
-      <button onClick={login}>login {user?.user && user.user.name}</button>
-      {user?.user && user.user.name}
-      {user?.user && user.user.email === "philispaxil@gmail.com" && (
+      <button onClick={login}>login {user && user.username}</button>
+      {user && user.username}
+      {user && user.username === "Shinyaigeek" && (
         <Link href="/build_thread">
           <a>スレッドを立てる</a>
         </Link>

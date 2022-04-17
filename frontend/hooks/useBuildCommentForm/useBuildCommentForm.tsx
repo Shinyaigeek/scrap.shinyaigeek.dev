@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { useAuthUser } from "../useAuthUser/useAuthUser";
 
 // TODO
 
@@ -19,21 +18,17 @@ export const useBuildCommentForm = function () {
     formState: { errors },
   } = useForm<CommentForm>();
 
-  const { token } = useAuthUser();
-
   const onSubmit = useCallback(
     handleSubmit((data) => {
-      console.log(token)
       fetch("http://localhost:8080/threads/create", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${token}`,
         },
       });
     }),
-    [token]
+    []
   );
 
   const Form = useCallback(() => {
