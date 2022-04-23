@@ -10,6 +10,15 @@ table! {
 }
 
 table! {
+    tags (id) {
+        id -> Int4,
+        tag -> Text,
+        icon -> Text,
+        create_at -> Timestamp,
+    }
+}
+
+table! {
     threads (id) {
         id -> Int4,
         slug -> Varchar,
@@ -30,6 +39,7 @@ table! {
 
 allow_tables_to_appear_in_same_query!(
     comments,
+    tags,
     threads,
     users,
 );
