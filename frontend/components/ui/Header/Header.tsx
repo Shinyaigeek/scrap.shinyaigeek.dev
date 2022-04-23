@@ -1,9 +1,9 @@
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 import Link from "next/link";
 import { useAuthUser } from "../../../hooks/useAuthUser/useAuthUser";
 import { hero } from "./Header.css";
 
-export const Header: VFC = function () {
+export const Header: FunctionComponent = function () {
   const { user, login } = useAuthUser();
   return (
     <header className={hero}>
