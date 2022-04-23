@@ -5,7 +5,6 @@ import { hero } from "./Header.css";
 
 export const Header: VFC = function () {
   const { user, login } = useAuthUser();
-  console.log(user)
   return (
     <header className={hero}>
       scrap.shinyaigeek.dev
