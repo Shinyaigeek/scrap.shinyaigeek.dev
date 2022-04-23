@@ -6,5 +6,5 @@ interface ButtonProps {
 }
 
 export const Button: FunctionComponent<ButtonProps> = function ({ children }) {
-  return <button>{children}</button>;
+  return <button className={buttonStyle}>{children}</button>;
 };
