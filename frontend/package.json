@@ -16,7 +16,8 @@
     "nookies": "^2.5.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-hook-form": "^7.18.0"
+    "react-hook-form": "^7.18.0",
+    "storybook": "^6.4.22"
   },
   "scripts": {
     "dev": "next dev",
