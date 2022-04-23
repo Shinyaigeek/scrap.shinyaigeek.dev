@@ -1,6 +1,10 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, VFC } from "react";
 import { buttonStyle } from "./Button.css";
 
-export const Button: FunctionComponent = function () {
-  return <button></button>;
+interface ButtonProps {
+  children: React.ReactNode;
+}
+
+export const Button: FunctionComponent<ButtonProps> = function ({ children }) {
+  return <button>{children}</button>;
 };
