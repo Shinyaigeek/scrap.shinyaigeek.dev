@@ -1,8 +1,7 @@
 import { Meta, Story } from "@storybook/react";
 
 import { Header } from "./Header";
-
-import { AuthUserContextMockProvider } from "../useAuthUser/context";
+import { SessionProvider } from 'next-auth/react';
 
 export default {
   title: "common/Header",
@@ -11,10 +10,4 @@ export default {
 
 export const HeaderLoggedIn: Story = () => <Header />;
 HeaderLoggedIn.storyName = "Header Normal";
-HeaderLoggedIn.decorators = [
-  (storyFn) => (
-    <>
-      <AuthUserContextMockProvider>{storyFn()}</AuthUserContextMockProvider>
-    </>
-  ),
-];
+HeaderLoggedIn.decorators = [(storyFn) => <SessionProvider>{storyFn()}</SessionProvider>];
