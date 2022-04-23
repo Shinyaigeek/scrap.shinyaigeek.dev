@@ -10,6 +10,14 @@ table! {
 }
 
 table! {
+    rel_tag_thread (id) {
+        id -> Int4,
+        tag -> Int4,
+        thread -> Int4,
+    }
+}
+
+table! {
     tags (id) {
         id -> Int4,
         tag -> Text,
@@ -39,6 +47,7 @@ table! {
 
 allow_tables_to_appear_in_same_query!(
     comments,
+    rel_tag_thread,
     tags,
     threads,
     users,
