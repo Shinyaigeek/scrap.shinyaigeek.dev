@@ -4,13 +4,12 @@ use super::super::super::connection::establish::DbConnection;
 use diesel;
 use diesel::prelude::*;
 use diesel::result::Error;
-use std::time::SystemTime;
 
 #[derive(Insertable)]
 #[table_name = "rel_tag_thread"]
 pub struct NewRelTagThread {
-    pub tag_id: i32,
-    pub thread_id: i32
+    pub tag: i32,
+    pub thread: i32
 }
 
 pub fn create(new_rel_tag_thread: NewRelTagThread, connection: DbConnection) -> Result<RelTagThread, Error> {
