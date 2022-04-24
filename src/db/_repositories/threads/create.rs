@@ -4,7 +4,6 @@ use super::super::super::connection::establish::DbConnection;
 use diesel;
 use diesel::prelude::*;
 use diesel::result::Error;
-use std::time::SystemTime;
 
 #[derive(Insertable)]
 #[table_name = "threads"]

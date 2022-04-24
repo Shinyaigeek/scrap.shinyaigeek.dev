@@ -9,10 +9,13 @@ use diesel::result::Error;
 #[table_name = "rel_tag_thread"]
 pub struct NewRelTagThread {
     pub tag: i32,
-    pub thread: i32
+    pub thread: i32,
 }
 
-pub fn create(new_rel_tag_thread: NewRelTagThread, connection: DbConnection) -> Result<RelTagThread, Error> {
+pub fn create(
+    new_rel_tag_thread: NewRelTagThread,
+    connection: DbConnection,
+) -> Result<RelTagThread, Error> {
     diesel::insert_into(rel_tag_thread::table)
         .values(&new_rel_tag_thread)
         .get_result(&connection)

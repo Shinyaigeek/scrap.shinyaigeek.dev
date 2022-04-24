@@ -4,7 +4,6 @@ use super::super::super::connection::establish::DbConnection;
 use diesel;
 use diesel::prelude::*;
 use diesel::result::Error;
-use std::time::SystemTime;
 
 pub fn read_all_threads(connection: DbConnection) -> Result<Vec<Thread>, Error> {
     threads::dsl::threads
@@ -21,6 +20,6 @@ pub fn read_threads(cnt: i32, connection: DbConnection) -> Result<Vec<Thread>, E
 
 pub fn read_thread(slug: String, connection: DbConnection) -> Result<Vec<Thread>, Error> {
     threads::dsl::threads
-        .filter((threads::slug.eq(slug)))
+        .filter(threads::slug.eq(slug))
         .load::<Thread>(&connection)
 }
