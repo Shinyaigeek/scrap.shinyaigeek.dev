@@ -4,6 +4,5 @@ use std::time::SystemTime;
 pub struct Tag {
     pub id: i32,
     pub tag: String,
-    pub created_at: SystemTime,
     pub icon: String,
 }
