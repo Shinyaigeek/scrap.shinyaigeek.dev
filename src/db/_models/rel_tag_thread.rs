@@ -1,5 +1,3 @@
-use std::time::SystemTime;
-
 #[derive(Queryable)]
 pub struct RelTagThread {
     pub id: i32,
