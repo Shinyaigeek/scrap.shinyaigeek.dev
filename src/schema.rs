@@ -22,7 +22,6 @@ table! {
         id -> Int4,
         tag -> Text,
         icon -> Text,
-        create_at -> Timestamp,
     }
 }
 
