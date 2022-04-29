@@ -1,5 +1,7 @@
 use super::super::super::_models::tags::Tag;
-use super::super::super::_repositories::tags::read::{read_tag as _read_tag, read_all_tags as _read_all_tags};
+use super::super::super::_repositories::tags::read::{
+    read_all_tags as _read_all_tags, read_tag as _read_tag,
+};
 use super::super::super::connection::establish::DbConnection;
 use diesel::result::Error;
 
