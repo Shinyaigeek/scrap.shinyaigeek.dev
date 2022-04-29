@@ -1,19 +1,17 @@
-use super::super::super::_models::comments::Comment;
-use super::super::super::_repositories::comments::create::{create, NewComment};
+use super::super::super::_models::tags::Tag;
+use super::super::super::_repositories::tags::create::{create, NewTag};
 use super::super::super::connection::establish::DbConnection;
 use diesel::result::Error;
 
-pub fn create_comment(
-    content: String,
-    author: String,
-    thread: i32,
+pub fn create_tag(
+    tag: String,
+    icon: String,
     connection: DbConnection,
-) -> Result<Comment, Error> {
+) -> Result<Tag, Error> {
     create(
-        NewComment {
-            content,
-            author,
-            thread,
+        NewTag {
+            tag,
+            icon
         },
         connection,
     )
