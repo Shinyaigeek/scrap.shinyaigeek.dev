@@ -1,12 +1,11 @@
 import { FunctionComponent } from "react";
 import Link from "next/link";
 import { useAuthUser } from "../../../hooks/useAuthUser/useAuthUser";
-import { hero } from "./Header.css";
 
 export const Header: FunctionComponent = function () {
   const { user, login } = useAuthUser();
   return (
-    <header className={hero}>
+    <header>
       scrap.shinyaigeek.dev
       <button onClick={login}>login {user && user.username}</button>
       {user && user.username}
