@@ -3,11 +3,15 @@ import Link from "next/link";
 import { useAuthUser } from "../../../hooks/useAuthUser/useAuthUser";
 
 export const Header: FunctionComponent = function () {
-  const { user, login } = useAuthUser();
+  const { user, login, logout } = useAuthUser();
   return (
-    <header className="text-red-400">
+    <header className="text-xl space-x-3 space-y-3 border-yellow-300">
       scrap.shinyaigeek.dev
-      <button onClick={login}>login {user && user.username}</button>
+      {user ? (
+        <button onClick={logout}>logout {user && user.username}</button>
+      ) : (
+        <button onClick={login}>login</button>
+      )}
       {user && user.username}
       {user && user.username === "Shinyaigeek" && (
         <Link href="/build_thread">
