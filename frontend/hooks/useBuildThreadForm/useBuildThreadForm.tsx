@@ -33,9 +33,19 @@ export const useBuildThreadForm = function () {
   const Form = useCallback(() => {
     return (
       <form onSubmit={onSubmit}>
-        <input {...register("title")} />
-        <input {...register("slug")} />
-        <input type="checkbox" {...register("published")} />
+        <div className="flex-col">
+          <p>title: </p>
+          <input {...register("title")} className="w-12" />
+        </div>
+        <div>
+          <p>slug: </p>
+          <input {...register("slug")} />
+        </div>
+        <div>
+          <p>publish: </p>
+          <input type="checkbox" {...register("published")} />
+        </div>
+        <p>content</p>
         <textarea {...register("content")} />
         <input type="submit" />
       </form>
