@@ -9,7 +9,7 @@ export const Header: FunctionComponent = function () {
     <header className="text-xl space-x-3 space-y-3 sticky border-b-2 border-gray-400 px-3 py-2">
       scrap.shinyaigeek.dev
       {user ? (
-        <Button onClick={logout}>logout {user && user.username}</Button>
+        <Button onClick={logout}>logout</Button>
       ) : (
         <Button onClick={login}>login</Button>
       )}
