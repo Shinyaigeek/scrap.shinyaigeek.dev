@@ -5,7 +5,7 @@ import { useAuthUser } from "../../../hooks/useAuthUser/useAuthUser";
 export const Header: FunctionComponent = function () {
   const { user, login } = useAuthUser();
   return (
-    <header>
+    <header className="text-red-400">
       scrap.shinyaigeek.dev
       <button onClick={login}>login {user && user.username}</button>
       {user && user.username}
