@@ -1,8 +1,6 @@
-import { FunctionComponent, VFC } from "react";
+import { FunctionComponent } from "react";
 
-interface ButtonProps {
-  children: React.ReactNode;
-}
+type ButtonProps = JSX.IntrinsicElements["button"];
 
 export const Button: FunctionComponent<ButtonProps> = function ({ children }) {
   return <button>{children}</button>;
