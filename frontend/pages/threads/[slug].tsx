@@ -1,4 +1,3 @@
-import { useAuthUser } from "../../hooks/useAuthUser/useAuthUser";
 import { useBuildCommentForm } from "../../hooks/useBuildCommentForm/useBuildCommentForm";
 interface Props {
   thread: {
@@ -19,8 +18,8 @@ function Thread({ thread, }: Props) {
   const { title, slug, content } = thread;
   const [Form] = useBuildCommentForm(thread.id);
   return (
-    <>
-      <h1>{title}</h1>
+    <main className="bg-white w-4/5 m-auto">
+      <h1 className="text-xl text-center">{title}</h1>
       <p>{content}</p>
 
       <h2>comments</h2>
@@ -28,7 +27,7 @@ function Thread({ thread, }: Props) {
 
       <p>write comment</p>
       <Form />
-    </>
+    </main>
   );
 }
 

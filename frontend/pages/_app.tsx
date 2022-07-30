@@ -12,7 +12,9 @@ const App: VFC<{
   return (
     <SessionProvider session={session}>
       <Header />
-      <Component {...pageProps} />
+      <div className="bg-slate-300 min-h-screen">
+        <Component {...pageProps} />
+      </div>
     </SessionProvider>
   );
 };
