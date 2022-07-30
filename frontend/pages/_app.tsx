@@ -3,6 +3,8 @@ import { VFC } from "react";
 import { Header } from "../components/ui/Header/Header";
 import { SessionProvider } from "next-auth/react";
 
+import "../styles/globals.css";
+
 const App: VFC<{
   Component: VFC<AppPropsType>;
   pageProps: AppPropsType;
