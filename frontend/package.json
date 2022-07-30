@@ -4,9 +4,6 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@vanilla-extract/babel-plugin": "^1.0.0",
-    "@vanilla-extract/css": "^1.0.0",
-    "@vanilla-extract/webpack-plugin": "^1.0.1",
     "css-loader": "^5.2.6",
     "dotenv": "^10.0.0",
     "firebase-admin": "^10.0.2",
