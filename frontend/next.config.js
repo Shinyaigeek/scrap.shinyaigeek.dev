@@ -1,8 +1,7 @@
 require("dotenv").config();
 
-const { VanillaExtractPlugin } = require("@vanilla-extract/webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-function withVanillaExtract(pluginOptions = {}) {
+function withCustomWebpackConfig(pluginOptions = {}) {
   /**
    * @param {any} nextConfig Custom config for Next.js
    */
@@ -18,8 +17,6 @@ function withVanillaExtract(pluginOptions = {}) {
         });
 
         const plugins = [];
-
-        plugins.push(new VanillaExtractPlugin(pluginOptions));
 
         plugins.push(
           new MiniCssExtractPlugin({
@@ -45,7 +42,7 @@ function withVanillaExtract(pluginOptions = {}) {
   };
 }
 
-module.exports = withVanillaExtract()({
+module.exports = withCustomWebpackConfig()({
   env: {
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTHDOMAIN: process.env.FIREBASE_AUTHDOMAIN,
