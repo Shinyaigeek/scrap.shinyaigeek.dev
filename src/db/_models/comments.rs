@@ -1,6 +1,7 @@
 use std::time::SystemTime;
+use serde::{Serialize, Deserialize};
 
-#[derive(Queryable)]
+#[derive(Queryable, Serialize, Deserialize)]
 pub struct Comment {
     pub id: i32,
     pub author: String,
